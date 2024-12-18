@@ -175,7 +175,7 @@ def create_science_object_on_member_node(client, file_path):
     sys_meta = generate_system_metadata_for_science_object(
         pid, SYSMETA_FORMATID, sci_obj
     )
-    client.create(pid, io.StringIO(sci_obj), sys_meta)
+    client.create(pid, io.BytesIO(sci_obj), sys_meta)
 
 
 def create_package_on_member_node(client, files_in_group):
@@ -183,18 +183,16 @@ def create_package_on_member_node(client, files_in_group):
     pids = [os.path.basename(p) for p in files_in_group]
     resource_map = create_resource_map_for_pids(package_pid, pids)
     sys_meta = generate_system_metadata_for_science_object(
-        package_pid, RESOURCE_MAP_FORMAT_ID, resource_map
+        package_pid, RESOURCE_MAP_FORMAT_ID, resource_map.serialize_to_transport()
     )
     client.create(package_pid, io.StringIO(resource_map), sys_meta)
 
 
 def create_resource_map_for_pids(package_pid, pids):
-    # Create a resource map generator that will generate resource maps that, by
-    # default, use the DataONE production environment for resolving the object
-    # URIs. To use the resource map generator in a test environment, pass the base
-    # url to the root CN in that environment in the dataone_root parameter.
-    resource_map_generator = d1_common.resource_map.ResourceMapGenerator()
-    return resource_map_generator.simple_generate_resource_map(
+    # Create a resource map that, by default, uses the DataONE production environment for resolving
+    # the object URIs. To use the resource map generator in a test environment, pass the base url to
+    # the root CN in that environment in the dataone_root parameter.
+    return d1_common.resource_map.createSimpleResourceMap(
         package_pid, pids[0], pids[1:]
     )
 
