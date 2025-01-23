@@ -171,7 +171,8 @@ def main():
 # once, for the MD5 checksum calculation.
 def create_science_object_on_member_node(client, file_path):
     pid = os.path.basename(file_path)
-    sci_obj = open(file_path, "rb").read()
+    with open(file_path, "rb") as fp:
+        sci_obj = fp.read()
     sys_meta = generate_system_metadata_for_science_object(
         pid, SYSMETA_FORMATID, sci_obj
     )
