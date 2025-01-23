@@ -182,9 +182,11 @@ def create_science_object_on_member_node(client, file_path):
 def create_package_on_member_node(client, files_in_group):
     package_pid = group_name(files_in_group[0])
     pids = [os.path.basename(p) for p in files_in_group]
-    resource_map = create_resource_map_for_pids(package_pid, pids).serialize_to_transport()
+    resource_map = create_resource_map_for_pids(
+        package_pid, pids
+    ).serialize_to_transport()
     sys_meta = generate_system_metadata_for_science_object(
-        package_pid, RESOURCE_MAP_FORMAT_ID, resource_map.serialize_to_transport()
+        package_pid, RESOURCE_MAP_FORMAT_ID, resource_map
     )
     client.create(package_pid, io.BytesIO(resource_map), sys_meta)
 
