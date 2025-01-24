@@ -36,7 +36,6 @@ import os
 import sys
 import urllib.parse
 
-import d1_client.mnclient
 import d1_common.const
 import d1_common.env
 # D1
